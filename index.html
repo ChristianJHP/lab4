@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nim Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .pile {
+            font-size: 24px;
+            margin: 10px;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Play Nim Game</h1>
+
+<div id="game">
+    <p id="pile">Initial pile size: <span id="pile-size">21</span></p>
+    <p>Pick 1, 2, or 3 stones:</p>
+    <button onclick="playerMove(1)">1</button>
+    <button onclick="playerMove(2)">2</button>
+    <button onclick="playerMove(3)">3</button>
+    <p id="message"></p>
+</div>
+
+<script>
+    let pileSize = 21;
+
+    function playerMove(stones) {
+        if (stones < 1 || stones > 3 || stones > pileSize) {
+            document.getElementById("message").innerText = "Invalid move. Try again!";
+            return;
+        }
+        pileSize -= stones;
+        updatePileSize();
+
+        if (pileSize <= 0) {
+            document.getElementById("message").innerText = "You win!";
+            disableButtons();
+            return;
+        }
+
+        computerMove();
+    }
+
+    function computerMove() {
+        let stones = Math.min(3, pileSize); // Computer plays optimally by taking the minimum
+        pileSize -= stones;
+        document.getElementById("message").innerText = `Computer took ${stones} stones.`;
+
+        updatePileSize();
+
+        if (pileSize <= 0) {
+            document.getElementById("message").innerText = "Computer wins!";
+            disableButtons();
+        }
+    }
+
+    function updatePileSize() {
+        document.getElementById("pile-size").innerText = pileSize;
+    }
+
+    function disableButtons() {
+        const buttons = document.querySelectorAll("button");
+        buttons.forEach(button => button.disabled = true);
+    }
+</script>
+
+</body>
+</html>
